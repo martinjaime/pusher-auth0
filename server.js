@@ -3,12 +3,13 @@ const path = require('path');
 const bodyParser = require("body-parser");
 const app = express();
 const Pusher = require('pusher');
+const env = require('./src/env')
 
 const pusher = new Pusher({
-    appId: 'APP_ID',
-    key: 'APP_KEY',
-    secret: 'SECRET',
-    cluster: 'YOUR CLUSTER',
+    appId: env.REACT_APP_PUSHER_APP_ID,
+    key: env.REACT_APP_PUSHER_KEY,
+    secret: env.REACT_APP_PUSHER_SECRET,
+    cluster: 'us2',
     encrypted: true
 });
 

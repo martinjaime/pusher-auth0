@@ -1,22 +1,19 @@
 import { EventEmitter } from 'events';
 import auth0 from 'auth0-js';
-import { AUTH_CONFIG } from './auth0-variables';
 import history from '../history';
 
 export default class Auth extends EventEmitter {
-  auth0 = new auth0.WebAuth({
-    domain: AUTH_CONFIG.domain,
-    clientID: AUTH_CONFIG.clientId,
-    redirectUri: AUTH_CONFIG.callbackUrl,
-    audience: `https://${AUTH_CONFIG.domain}/userinfo`,
-    responseType: 'token id_token',
-    scope: 'openid profile'
-  });
-
-  userProfile;
-
-  constructor() {
+  constructor(env) {
     super();
+    this.auth0 = new auth0.WebAuth({
+      domain: env.REACT_APP_AUTH0_DOMAIN,
+      clientID: env.REACT_APP_AUTH0_CLIENT_ID,
+      redirectUri: env.REACT_APP_AUTH0_CALLBACK_URL,
+      audience: `https://${env.REACT_APP_AUTH0_DOMAIN}/userinfo`,
+      responseType: 'token id_token',
+      scope: 'openid profile'
+    });
+
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
@@ -66,7 +63,7 @@ export default class Auth extends EventEmitter {
     return accessToken;
   }
 
-  getProfile(cb) {
+  getProfile(cb = () => {}) {
     let accessToken = this.getAccessToken();
     this.auth0.client.userInfo(accessToken, (err, profile) => {
       if (profile) {

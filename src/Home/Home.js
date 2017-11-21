@@ -22,7 +22,7 @@ class Home extends Component {
                   {
                       !isAuthenticated() && (
                           <div>
-                            <p>We need you to sign in/sign up with Auth0 before you can access our chat. 😁</p>
+                            <p>We need you to sign in/sign up with Auth0 before you can access our chat.</p>
                             <p><a className="btn btn-primary btn-lg" onClick={this.login.bind(this)}>Login</a></p>
                           </div>
                       )
@@ -30,7 +30,7 @@ class Home extends Component {
                   {
                       isAuthenticated() && (
                           <div>
-                            <p>Let's chat. 😁</p>
+                            <p>Let's chat.</p>
                             <Link className="btn btn-primary btn-lg" to="chat">Chat</Link>
                           </div>
                       )

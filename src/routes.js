@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, BrowserRouter } from 'react-router-dom';
+import { Redirect, Route, Router } from 'react-router-dom';
 import App from './App';
 import Home from './Home/Home';
 import Profile from './Profile/Profile';
@@ -7,8 +7,9 @@ import Chat from './Chat/Chat';
 import Callback from './Callback/Callback';
 import Auth from './Auth/Auth';
 import history from './history';
+import env from './env';
 
-const auth = new Auth();
+const auth = new Auth(env);
 
 const handleAuthentication = (nextState, replace) => {
   if (/access_token|id_token|error/.test(nextState.location.hash)) {
@@ -18,7 +19,7 @@ const handleAuthentication = (nextState, replace) => {
 
 export const makeMainRoutes = () => {
   return (
-    <BrowserRouter history={history} component={App}>
+    <Router history={history} component={App}>
         <div>
           <Route path="/" render={(props) => <App auth={auth} {...props} />} />
           <Route path="/home" render={(props) => <Home auth={auth} {...props} />} />
@@ -26,7 +27,7 @@ export const makeMainRoutes = () => {
             !auth.isAuthenticated() ? (
               <Redirect to="/home"/>
             ) : (
-              <Chat auth={auth} {...props} />
+              <Chat auth={auth} apikey={env.REACT_APP_PUSHER_KEY} {...props} />
             )
           )} />
           <Route path="/profile" render={(props) => (
@@ -41,6 +42,6 @@ export const makeMainRoutes = () => {
             return <Callback {...props} /> 
           }}/>        
         </div>
-      </BrowserRouter>
+      </Router>
   );
 }
